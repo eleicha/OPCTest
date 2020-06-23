@@ -1,1 +1,0 @@
-/usr/bin/c++     CMakeFiles/historical_server.dir/tutorial_server_historicaldata.cpp.o  -o bin/examples/historical_server  -Wl,-rpath,/usr/local/lib /usr/local/lib/libopen62541.so.0.0.0 -lm -lpthread -lrt 

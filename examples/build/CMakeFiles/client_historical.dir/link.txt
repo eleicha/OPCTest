@@ -1,1 +1,0 @@
-/usr/bin/c++     CMakeFiles/client_historical.dir/client_historical.cpp.o  -o bin/examples/client_historical  -Wl,-rpath,/usr/local/lib /usr/local/lib/libopen62541.so.0.0.0 -lm -lpthread -lrt 
