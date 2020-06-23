@@ -1,4 +1,4 @@
-# Install script for directory: /home/eleicha/Documents/DFKI/Code/examples_open62541/examples
+# Install script for directory: /home/eleicha/Documents/DFKI/Code/OPCTest/examples
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -38,7 +38,7 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE PROGRAM RENAME "ua_client" FILES "/home/eleicha/Documents/DFKI/Code/examples_open62541/examples/build/bin/examples/client")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE PROGRAM RENAME "ua_client" FILES "/home/eleicha/Documents/DFKI/Code/OPCTest/examples/build/bin/examples/client")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -49,5 +49,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/eleicha/Documents/DFKI/Code/examples_open62541/examples/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/eleicha/Documents/DFKI/Code/OPCTest/examples/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

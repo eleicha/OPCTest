@@ -6,5 +6,5 @@ CXX_FLAGS =
 
 CXX_DEFINES = -DUA_ARCHITECTURE_POSIX
 
-CXX_INCLUDES = -I/home/eleicha/Documents/DFKI/Code/examples_open62541/examples/build/src_generated -I/home/eleicha/Documents/DFKI/Code/examples_open62541/examples 
+CXX_INCLUDES = -I/home/eleicha/Documents/DFKI/Code/OPCTest/examples/build/src_generated -I/home/eleicha/Documents/DFKI/Code/OPCTest/examples 
 

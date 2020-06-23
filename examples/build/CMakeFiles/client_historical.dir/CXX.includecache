@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/eleicha/Documents/DFKI/Code/examples_open62541/examples/client_historical.cpp
+/home/eleicha/Documents/DFKI/Code/OPCTest/examples/client_historical.cpp
 open62541/client_config_default.h
 -
 open62541/client_highlevel.h

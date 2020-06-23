@@ -6,3 +6,19 @@
 
 #IncludeRegexTransform: 
 
+/home/eleicha/Documents/DFKI/Code/OPCTest/examples/client.cpp
+open62541/client_config_default.h
+-
+open62541/client_highlevel.h
+-
+open62541/client_subscriptions.h
+-
+open62541/plugin/log_stdout.h
+-
+stdlib.h
+-
+iostream
+-
+string
+-
+
