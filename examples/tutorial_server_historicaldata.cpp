@@ -4,12 +4,14 @@
  * Copyright 2019 (c) basysKom GmbH <opensource@basyskom.com> (Author: Peter Rustler)
  */
 
-//#include <open62541/plugin/historydata/history_data_backend_memory.h>
-//#include <open62541/plugin/historydata/history_data_gathering_default.h>
-//#include <open62541/plugin/historydata/history_database_default.h>
+//#define UA_ENABLE_HISTORIZING
+
+#include <open62541/server.h>
+#include <open62541/plugin/historydata/history_data_backend_memory.h>
+#include <open62541/plugin/historydata/history_data_gathering_default.h>
+#include <open62541/plugin/historydata/history_database_default.h>
 #include <open62541/plugin/historydatabase.h>
 #include <open62541/plugin/log_stdout.h>
-#include <open62541/server.h>
 #include <open62541/server_config_default.h>
 
 #include <signal.h>
@@ -35,6 +37,8 @@ int main(void) {
      * We will use this gathering for one node, only. initialNodeIdStoreSize = 1
      * The store will grow if you register more than one node, but this is expensive. */
     UA_HistoryDataGathering gathering = UA_HistoryDataGathering_Default(1);
+
+    #ifdef UA_ENABLE_HISTORIZING
 
     /* We set the responsible plugin in the configuration. UA_HistoryDatabase is
      * the main plugin which handles the historical data service. */
@@ -128,5 +132,8 @@ int main(void) {
     */
 
     UA_Server_delete(server);
+
+    #endif
+
     return retval == UA_STATUSCODE_GOOD ? EXIT_SUCCESS : EXIT_FAILURE;
 }

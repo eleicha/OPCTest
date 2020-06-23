@@ -1,6 +1,9 @@
 /* This work is licensed under a Creative Commons CCZero 1.0 Universal License.
  * See http://creativecommons.org/publicdomain/zero/1.0/ for more information. */
 
+//#define UA_ENABLE_HISTORIZING
+//#define UA_ENABLE_EXPERIMENTAL_HISTORIZING
+
 #include <open62541/client_config_default.h>
 #include <open62541/client_highlevel.h>
 
@@ -134,20 +137,18 @@ readHist(UA_Client *client, const UA_NodeId *nodeId,
 }
 
 int main(int argc, char *argv[]) {
-
     UA_Client *client = UA_Client_new();
     UA_ClientConfig_setDefault(UA_Client_getConfig(client));
 
     /* Connect to the Unified Automation demo server */
-    UA_StatusCode retval = UA_Client_connect(client, "opc.tcp://localhost:53530/OPCUA/SimulationServer");
+    UA_StatusCode retval = UA_Client_connect(client, "opc.tcp://localhost:4840");
     if(retval != UA_STATUSCODE_GOOD) {
         UA_Client_delete(client);
         return EXIT_FAILURE;
     }
 
-    printf("Do you even compile?");
-
-#ifdef UA_ENABLE_EXPERIMENTAL_HISTORIZING
+#ifdef UA_ENABLE_HISTORIZING
+    printf("you dont enter here right?");
     /* Read historical values (uint32) */
     printf("\nStart historical read (1, \"myUintValue\"):\n");
     UA_NodeId node = UA_NODEID_STRING(2, "MyLevel");
@@ -158,6 +159,7 @@ int main(int argc, char *argv[]) {
         printf("Failed. %s\n", UA_StatusCode_name(retval));
     }
 
+#ifdef UA_ENABLE_EXPERIMENTAL_HISTORIZING
     printf("\nStart historical modified read (1, \"myUintValue\"):\n");
     retval = UA_Client_HistoryRead_modified(client, &node, readHist,
                                        UA_DateTime_fromUnixTime(0), UA_DateTime_now(), UA_STRING_NULL, false, 10, UA_TIMESTAMPSTORETURN_BOTH, (void *)UA_FALSE);
@@ -176,6 +178,7 @@ int main(int argc, char *argv[]) {
     if (retval != UA_STATUSCODE_GOOD) {
         printf("Failed. %s\n", UA_StatusCode_name(retval));
     }
+#endif
 #endif
     UA_Client_disconnect(client);
     UA_Client_delete(client);
