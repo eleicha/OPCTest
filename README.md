@@ -22,7 +22,7 @@ Download the newest [open62541](https://open62541.org/) release and build from s
 cd open62541 # or however you named the file you saved the open62541 release in
 mkdir build
 cd build
-cmake -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DUA_NAMESPACE_ZERO=FULL -DUA_ENABLE_HISTORIZING=1 -DUA_ENABLE_EXPERIMENTA_HISTORIZING=1 ..
+cmake -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DUA_NAMESPACE_ZERO=FULL -DUA_ENABLE_HISTORIZING=1 -DUA_ENABLE_EXPERIMENTAL_HISTORIZING=1 ..
 make
 sudo make install
 ```
@@ -33,7 +33,7 @@ sudo make install
 cd examples 
 mkdir build
 cd build
-cmake -DUA_NAMESPACE_ZERO=FULL -DUA_ENABLE_HISTORIZING=1 -DUA_ENABLE_EXPERIMENTA_HISTORIZING=1 ..
+cmake -DUA_NAMESPACE_ZERO=FULL -DUA_ENABLE_HISTORIZING=1 -DUA_ENABLE_EXPERIMENTAL_HISTORIZING=1 ..
 make
 ```
 
