@@ -9,6 +9,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <iostream>
+#include <string>
 
 #ifdef UA_ENABLE_EXPERIMENTAL_HISTORIZING
 static void
@@ -81,41 +83,6 @@ readRaw(const UA_HistoryData *data) {
     return true;
 }
 
-#ifdef UA_ENABLE_EXPERIMENTAL_HISTORIZING
-static UA_Boolean
-readRawModified(const UA_HistoryModifiedData *data) {
-    printf("readRawModified Value count: %lu\n", (long unsigned)data->dataValuesSize);
-
-    /* Iterate over all values */
-    for (size_t i = 0; i < data->dataValuesSize; ++i) {
-        printDataValue(&data->dataValues[i]);
-    }
-    printf("Modificaton Value count: %lu\n", data->modificationInfosSize);
-    for (size_t j = 0; j < data->modificationInfosSize; ++j) {
-        if (data->modificationInfos[j].userName.data)
-            printf("Username: %s, ", data->modificationInfos[j].userName.data);
-
-        printTimestamp("Modtime", data->modificationInfos[j].modificationTime);
-        printUpdateType(data->modificationInfos[j].updateType);
-    }
-
-    /* We want more data! */
-    return true;
-}
-
-static UA_Boolean
-readEvents(const UA_HistoryEvent *data) {
-    printf("readEvent Value count: %lu\n", (long unsigned)data->eventsSize);
-    for (size_t i = 0; i < data->eventsSize; ++i) {
-        printf("Processing event: %lu\n", (long unsigned)i);
-        for (size_t j = 0; j < data->events[i].eventFieldsSize; ++j) {
-             printf("Processing %lu: %s\n", (long unsigned)j, data->events[i].eventFields[j].type->typeName);
-        }
-    }
-    return true;
-}
-#endif
-
 static UA_Boolean
 readHist(UA_Client *client, const UA_NodeId *nodeId,
          UA_Boolean moreDataAvailable,
@@ -125,60 +92,75 @@ readHist(UA_Client *client, const UA_NodeId *nodeId,
     if (data->content.decoded.type == &UA_TYPES[UA_TYPES_HISTORYDATA]) {
         return readRaw((UA_HistoryData*)data->content.decoded.data);
     }
-#ifdef UA_ENABLE_EXPERIMENTAL_HISTORIZING
-    if (data->content.decoded.type == &UA_TYPES[UA_TYPES_HISTORYMODIFIEDDATA]) {
-        return readRawModified((UA_HistoryModifiedData*)data->content.decoded.data);
-    }
-    if (data->content.decoded.type == &UA_TYPES[UA_TYPES_HISTORYEVENT]) {
-        return readEvents((UA_HistoryEvent*)data->content.decoded.data);
-    }
-#endif
     return true;
 }
 
 int main(int argc, char *argv[]) {
+
+    const char* url = "opc.tcp://localhost:53530/OPCUA/SimulationServer";
+
+    if (argc < 3)
+    {
+        std::cout << "Using default URL: opc.tcp://localhost:53530/OPCUA/SimulationServer" << std::endl;
+
+    }else{
+
+        url = argv[2];
+
+    }
+
+    std::cout << url << std::endl;
+
     UA_Client *client = UA_Client_new();
     UA_ClientConfig_setDefault(UA_Client_getConfig(client));
 
-    /* Connect to the Unified Automation demo server */
-    UA_StatusCode retval = UA_Client_connect(client, "opc.tcp://localhost:4840");
-    if(retval != UA_STATUSCODE_GOOD) {
-        UA_Client_delete(client);
-        return EXIT_FAILURE;
-    }
+    UA_StatusCode retval;
+
+    retval = UA_Client_connect(client, url); 
+
 
 #ifdef UA_ENABLE_HISTORIZING
-    printf("you dont enter here right?");
+
+    UA_Int64 start = 1593012633;
+
+    if (argc < 2)
+    {
+        std::cout << "Using default date time: June 14th 2020, 16:17:47" << std::endl;
+
+    }else{
+        start = atoi(argv[1]);
+    }
+
+    UA_DateTime now = UA_DateTime_now();
     /* Read historical values (uint32) */
-    printf("\nStart historical read (1, \"myUintValue\"):\n");
-    UA_NodeId node = UA_NODEID_STRING(2, "MyLevel");
+    printf("\nStart historical read (3, \"h1\"):\n");
+    UA_NodeId node = UA_NODEID_STRING(3, "h1");
     retval = UA_Client_HistoryRead_raw(client, &node, readHist,
-                                       UA_DateTime_fromUnixTime(0), UA_DateTime_now(), UA_STRING_NULL, false, 10, UA_TIMESTAMPSTORETURN_BOTH, (void *)UA_FALSE);
+                                       UA_DateTime_fromUnixTime(start), now, UA_STRING_NULL, false, 10, UA_TIMESTAMPSTORETURN_BOTH, (void *)UA_FALSE);
 
     if (retval != UA_STATUSCODE_GOOD) {
         printf("Failed. %s\n", UA_StatusCode_name(retval));
     }
+/*
+    UA_Variant *v = UA_Variant_new();
+    UA_Int32 p = 5;
+    v->type = &UA_TYPES[UA_TYPES_INT32];
+    v->data = &p;
 
-#ifdef UA_ENABLE_EXPERIMENTAL_HISTORIZING
-    printf("\nStart historical modified read (1, \"myUintValue\"):\n");
-    retval = UA_Client_HistoryRead_modified(client, &node, readHist,
-                                       UA_DateTime_fromUnixTime(0), UA_DateTime_now(), UA_STRING_NULL, false, 10, UA_TIMESTAMPSTORETURN_BOTH, (void *)UA_FALSE);
+    UA_DataValue val;
+    UA_DataValue_init(&val);
+    val.value = *v;
+    val.sourceTimestamp = UA_DateTime_now();
+    val.serverTimestamp = UA_DateTime_now();
+
+
+    UA_NodeId node1 = UA_NODEID_STRING(3, "h1");
+    retval = UA_Client_HistoryUpdate_update(client, &node1, &val);
 
     if (retval != UA_STATUSCODE_GOOD) {
         printf("Failed. %s\n", UA_StatusCode_name(retval));
-    }
+    }*/
 
-    printf("\nStart historical event read (1, \"myUintValue\"):\n");
-    UA_EventFilter filter;
-    UA_EventFilter_init(&filter);
-    UA_NodeId eventNode = UA_NODEID_NUMERIC(0, 2253);
-    retval = UA_Client_HistoryRead_events(client, &eventNode, readHist,
-                                       UA_DateTime_fromUnixTime(0), UA_DateTime_now(), UA_STRING_NULL, filter, 10, UA_TIMESTAMPSTORETURN_BOTH, (void *)UA_FALSE);
-
-    if (retval != UA_STATUSCODE_GOOD) {
-        printf("Failed. %s\n", UA_StatusCode_name(retval));
-    }
-#endif
 #endif
     UA_Client_disconnect(client);
     UA_Client_delete(client);

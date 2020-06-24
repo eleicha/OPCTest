@@ -7,7 +7,6 @@ All of the following utilize [open62541](https://open62541.org/).
 - a simply client that reads and updates data
 - a simply server that stores and recieves data updates
 - a simply historical client
-- a simply historical server
 
 We wrote all examples in c++, hence, there will be warnings, however, no errors should occur.
 
@@ -38,3 +37,9 @@ make
 ```
 
 The executables are now in the folder ~/OPCTest/examples/build/bin/examples
+
+## Testing Historical Client
+
+To test the historical client, we used Prosys OPC UA Simulation Server. For the Simulation we added a Historical folder with the variable "h1" that is simply simulating a counter from 0 to 10. Note that since it is an historical read, simulating a constant will not yield any results. 
+
+

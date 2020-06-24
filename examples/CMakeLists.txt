@@ -84,6 +84,3 @@ install(PROGRAMS $<TARGET_FILE:client>
 ####################
 
 add_example(example_server server.cpp)
-if(UA_ENABLE_HISTORIZING)
-    add_example(historical_server tutorial_server_historicaldata.cpp)
-endif()
