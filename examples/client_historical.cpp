@@ -12,29 +12,6 @@
 #include <iostream>
 #include <string>
 
-#ifdef UA_ENABLE_EXPERIMENTAL_HISTORIZING
-static void
-printUpdateType(UA_HistoryUpdateType type) {
-    switch (type) {
-    case UA_HISTORYUPDATETYPE_INSERT:
-        printf("Insert\n");
-        return;
-    case UA_HISTORYUPDATETYPE_REPLACE:
-        printf("Replace\n");
-        return;
-    case UA_HISTORYUPDATETYPE_UPDATE:
-        printf("Update\n");
-        return;
-    case UA_HISTORYUPDATETYPE_DELETE:
-        printf("Delete\n");
-        return;
-    default:
-        printf("Unknown\n");
-        return;
-    }
-}
-#endif
-
 static void
 printTimestamp(char *name, UA_DateTime date) {
     UA_DateTimeStruct dts = UA_DateTime_toStruct(date);
@@ -121,7 +98,7 @@ int main(int argc, char *argv[]) {
 
 #ifdef UA_ENABLE_HISTORIZING
 
-    UA_Int64 start = 1593012633;
+    UA_Int64 start = 1593071405;
 
     if (argc < 2)
     {
@@ -141,25 +118,6 @@ int main(int argc, char *argv[]) {
     if (retval != UA_STATUSCODE_GOOD) {
         printf("Failed. %s\n", UA_StatusCode_name(retval));
     }
-/*
-    UA_Variant *v = UA_Variant_new();
-    UA_Int32 p = 5;
-    v->type = &UA_TYPES[UA_TYPES_INT32];
-    v->data = &p;
-
-    UA_DataValue val;
-    UA_DataValue_init(&val);
-    val.value = *v;
-    val.sourceTimestamp = UA_DateTime_now();
-    val.serverTimestamp = UA_DateTime_now();
-
-
-    UA_NodeId node1 = UA_NODEID_STRING(3, "h1");
-    retval = UA_Client_HistoryUpdate_update(client, &node1, &val);
-
-    if (retval != UA_STATUSCODE_GOOD) {
-        printf("Failed. %s\n", UA_StatusCode_name(retval));
-    }*/
 
 #endif
     UA_Client_disconnect(client);

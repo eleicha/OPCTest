@@ -126,25 +126,6 @@ int main(int argc, char *argv[]) {
     UA_WriteRequest_clear(&wReq);
     UA_WriteResponse_clear(&wResp);
 
-        /* Write node attribute */
-    value++;
-    printf("\nWriting a value of node (1, \"the.answer\"):\n");
-    UA_WriteRequest_init(&wReq);
-    wReq.nodesToWrite = UA_WriteValue_new();
-    wReq.nodesToWriteSize = 1;
-    wReq.nodesToWrite[0].nodeId = UA_NODEID_STRING_ALLOC(1, "the.answer");
-    wReq.nodesToWrite[0].attributeId = UA_ATTRIBUTEID_VALUE;
-    wReq.nodesToWrite[0].value.hasValue = true;
-    wReq.nodesToWrite[0].value.value.type = &UA_TYPES[UA_TYPES_INT32];
-    wReq.nodesToWrite[0].value.value.storageType = UA_VARIANT_DATA_NODELETE; /* do not free the integer on deletion */
-    wReq.nodesToWrite[0].value.value.data = &value;
-    wResp = UA_Client_Service_write(client, wReq);
-    if(wResp.responseHeader.serviceResult == UA_STATUSCODE_GOOD)
-            printf("the new value is: %i\n", value);
-    UA_WriteRequest_clear(&wReq);
-    UA_WriteResponse_clear(&wResp);
-
-
 
     UA_Client_disconnect(client);
     UA_Client_delete(client);
