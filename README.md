@@ -2,7 +2,7 @@
 
 ## Content
 
-Short presentation about OPC UA.
+Short [presentation](https://github.com/eleicha/OPCTest/blob/master/OPCSummary/OPCIntroLauraMons.pdf) about OPC UA.
 
 All of the following utilize [open62541](https://open62541.org/).
 
